@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instahyr</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-200 min-h-screen w-full flex flex-col">
+
+    <div class="p-4 mx-auto w-full flex-grow">
+
+        <!-- NAV BAR -->
+        <div
+            class="bg-zinc-100 border border-zinc-300 px-4 py-3 rounded-xl mb-12 flex items-center justify-between">
+            <h1
+                class="text-2xl font-black bg-gradient-to-r from-violet-700 to-indigo-500 bg-clip-text text-transparent">
+                Instahyr
+            </h1>
+            <div class="flex gap-4">
+                <a href="/candidate"
+                    class="text-zinc-600 hover:text-zinc-900 font-medium text-sm transition">
+                    Find Jobs
+                </a>
+                <a href="/recruiter"
+                    class="text-zinc-600 hover:text-zinc-900 font-medium text-sm transition">
+                    For Employers
+                </a>
+            </div>
+        </div>
+
+
+        <!-- HERO -->
+        <div class="flex flex-col items-center justify-center text-center my-16">
+            <h1
+                class="font-extrabold text-5xl md:text-6xl bg-gradient-to-r from-violet-700 to-indigo-500 bg-clip-text text-transparent tracking-tight mb-4">
+                Find the best match
+            </h1>
+
+            <p class="text-zinc-500 text-lg font-medium max-w-md">
+                Connecting top tier talent with industry leading companies seamlessly.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-x-20 gap-y-6 max-w-4xl mx-auto px-4">
+
+            <!-- RECRUITER -->
+            <div
+                class="flex flex-col justify-between bg-zinc-100 border border-zinc-300 p-8 rounded-2xl shadow-sm hover:shadow-md transition">
+                <div class="mb-6 flex flex-col items-center text-center">
+                    <h2
+                        class="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent text-2xl font-bold mb-2">
+                        Recruiter Portal
+                    </h2>
+                    <p class="text-zinc-500 text-sm leading-relaxed">
+                        Post open positions, manage pipelines, and find top talent for your team.
+                    </p>
+                </div>
+                <a href="/recruiter"
+                    class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl py-3 shadow-sm transition-all text-center">
+                    Enter Recruiter Portal
+                </a>
+
+            </div>
+
+
+            <!-- CANDIDATE -->
+            <div
+                class="flex flex-col justify-between bg-zinc-100 border border-zinc-300 p-8 rounded-2xl shadow-sm hover:shadow-md transition">
+                <div class="mb-6 flex flex-col items-center text-center">
+
+                    <h2
+                        class="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent text-2xl font-bold mb-2">
+                        Candidate Portal
+                    </h2>
+
+                    <p class="text-zinc-500 text-sm leading-relaxed">
+                        Discover curated job opportunities, submit profiles, and track applications easily.
+                    </p>
+
+                </div>
+
+                <a href="/candidate"l̥
+                    class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl py-3 shadow-sm transition-all text-center">
+                    Enter Candidate Portal
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer
+        class="w-full py-6 text-center text-zinc-400 text-xs border-t border-zinc-300 mt-12">
+        &copy; 2026 Instahyr. All rights reserved.
+    </footer>
+
+</body>
+</html>

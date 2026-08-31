@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instahyr - Candidate Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-slate-200 min-h-screen w-full flex flex-col">
+    <div class="p-4 mx-auto w-full flex-grow">
+      <div
+        class="bg-zinc-100 border border-zinc-300 px-4 py-3 rounded-xl mb-12 flex items-center justify-between"
+      >
+        <h1
+          class="text-2xl font-black bg-gradient-to-r from-violet-700 to-indigo-500 bg-clip-text text-transparent"
+        >
+          Instahyr
+        </h1>
+        <a href="/recruiter" class="text-zinc-600 font-medium text-sm"
+          >Recruiter Portal</a
+        >
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div
+            class="bg-zinc-100 border border-zinc-300 p-6 rounded-2xl shadow-sm"
+          >
+            <h2
+              class="text-center bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent text-xl font-bold mb-2"
+            >
+              Upload Resume
+            </h2>
+            <p
+              class="text-center text-zinc-500 text-xs leading-relaxed max-w-xs mx-auto"
+            >
+              Paste your resume text or upload a text file to match against
+              available jobs.
+            </p>
+
+            <form
+              action="/candidate"
+              method="post"
+              enctype="multipart/form-data"
+              class="mt-4 space-y-3"
+            >
+              <input
+                type="file"
+                name="resume"
+                class="w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+                accept=".txt,.pdf,.docx"
+              />
+              <textarea
+                name="resume_text"
+                id="resume-text"
+                rows="8"
+                class="w-full border border-zinc-300 rounded-xl p-3 text-sm"
+                placeholder="Paste resume here..."
+              ></textarea>
+              <input
+                type="email"
+                name="candidate_email"
+                class="w-full rounded-xl border border-zinc-300 p-3 text-sm"
+                placeholder="Email for applications (optional)"
+              />
+              <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-6 py-2 shadow-sm transition-all"
+              >
+                Match Me
+              </button>
+            </form>
+          </div>
+
+          <div
+            class="bg-zinc-100 border border-zinc-300 p-6 rounded-2xl shadow-sm min-h-[300px]"
+          >
+            <h3
+              class="text-zinc-800 text-base font-bold mb-4 pb-2 border-b border-zinc-300"
+            >
+              Analysis Result
+            </h3>
+            {% if analysis %}
+            <div class="space-y-3 text-xs text-zinc-700">
+              <div class="p-3    border-zinc-300 rounded-xl bg-white/50">
+                <div
+                  class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider"
+                >
+                  Candidate
+                </div>
+                <div class="mt-1 font-bold text-zinc-800">
+                  {{ analysis.name or 'Candidate' }}
+                </div>
+              </div>
+              
+              <div class="p-3 border border-zinc-300 rounded-xl bg-white/50">
+                <div
+                  class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider"
+                >
+                  Summary
+                </div>
+                <div
+                  class="mt-2 max-h-80 overflow-y-auto whitespace-pre-wrap break-words rounded-lg bg-white p-3 leading-relaxed text-zinc-600"
+                >
+                  {{ analysis.summary or 'Resume analyzed with Gemini.' }}
+                </div>
+              </div>
+            </div>
+            {% else %}
+            <p class="text-xs text-zinc-400 text-center py-10">
+              No resume analyzed yet.
+            </p>
+            {% endif %} {% if application_message %}
+            <p class="mt-3 text-sm font-semibold text-emerald-700">
+              {{ application_message }}
+            </p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div
+            class="bg-zinc-100 border border-zinc-300 p-6 rounded-2xl shadow-sm min-h-[555px] flex flex-col"
+          >
+            <h3
+              class="text-zinc-800 text-base font-bold mb-4 pb-2 border-b border-zinc-300"
+            >
+              Top 3 Job Matches
+            </h3>
+            <div class="flex-1 overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr
+                    class="border-b border-zinc-300 text-[11px] font-bold text-zinc-400 uppercase tracking-wider"
+                  >
+                    <th class="pb-2">Role</th>
+                    <th class="pb-2">Model result</th>
+                    <th class="pb-2">Skills found in resume</th>
+                    <th class="pb-2">Required for job</th>
+                    <th class="pb-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-zinc-200 text-xs text-zinc-700">
+                  {% if matches %} {% for match in matches %}
+                  <tr>
+                    <td class="py-3 font-semibold text-zinc-800">
+                      {{ match.title }}
+                      <div class="mt-1 text-[11px] font-normal text-zinc-500">
+                        {{ match.summary or 'Model-ranked match.' }}
+                      </div>
+                      <div class="mt-1 text-[11px] font-normal text-indigo-700">
+                        {{ match.recommendation or '' }}
+                      </div>
+                      <div
+                        class="mt-2 border-t border-zinc-200 pt-1 text-[10px] font-normal text-zinc-400"
+                      >
+                        LLM: {{ match.llm_status }}
+                      </div>
+                      <details
+                        class="mt-1 text-[10px] font-normal text-zinc-500"
+                      >
+                        <summary class="cursor-pointer font-semibold">
+                          LLM result
+                        </summary>
+                        <div class="mt-1">
+                          Strengths: {{ ', '.join(match.strengths) if
+                          match.strengths else 'None returned' }}
+                        </div>
+                        <div>
+                          Missing: {{ ', '.join(match.missing_required_skills)
+                          if match.missing_required_skills else 'None returned'
+                          }}
+                        </div>
+                      </details>
+                    </td>
+                    <td class="py-3 text-zinc-700">
+                      <div class="font-bold uppercase text-indigo-700">
+                        LightGBM: {{ match.model_label }}
+                      </div>
+                      <div class="text-[10px] text-zinc-500">
+                        Confidence: {{ match.model_confidence }}
+                      </div>
+                    </td>
+                    <td class="py-3 text-zinc-500">
+                      {{ ', '.join(match.matched_skills) if match.matched_skills
+                      else 'None' }}
+                    </td>
+                    <td class="py-3 text-zinc-500">
+                      {{ ', '.join(match.missing_skills) if match.missing_skills
+                      else 'None' }}
+                    </td>
+                    <td class="py-3">
+                      <details class="mb-2 text-[10px] text-zinc-500">
+                        <summary class="cursor-pointer font-semibold">
+                          Model result
+                        </summary>
+                        <pre class="mt-1 max-w-[180px] whitespace-pre-wrap">
+                        {{ match.model_result | tojson(indent=2) }}</pre
+                        >
+                      </details>
+                      <form action="/apply" method="post">
+                        <input
+                          type="hidden"
+                          name="job_id"
+                          value="{{ match.job_id }}"
+                        />
+                        <input
+                          type="hidden"
+                          name="candidate_name"
+                          value="{{ analysis.name or 'Candidate' }}"
+                        />
+                        <input
+                          type="hidden"
+                          name="candidate_email"
+                          value="{{ candidate_email or '' }}"
+                        />
+                        <input
+                          type="hidden"
+                          name="resume_text"
+                          value="{{ raw_resume }}"
+                        />
+                        <button
+                          type="submit"
+                          class="rounded-lg bg-indigo-600 px-3 py-1.5 font-semibold text-white"
+                        >
+                          Apply
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td colspan="5" class="py-10 text-center text-zinc-400">
+                      No matches yet. Upload a resume to see recommendations.
+                    </td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer
+      class="w-full py-6 text-center text-zinc-400 text-xs border-t border-zinc-300 mt-12"
+    >
+      &copy; 2026 Instahyr. All rights reserved.
+    </footer>
+
+    {% if application_success %}
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/50 p-4"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl"
+      >
+        <div
+          class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl text-emerald-700"
+        >
+          &#10003;
+        </div>
+        <h2 class="mt-4 text-xl font-bold text-zinc-900">
+          Application successful
+        </h2>
+        <p class="mt-2 text-sm text-zinc-600">{{ application_message }}</p>
+        <a
+          href="/candidate"
+          class="mt-5 inline-block rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white"
+          >Close</a
+        >
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>
